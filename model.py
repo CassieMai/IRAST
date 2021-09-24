@@ -2,8 +2,10 @@
 import torch.nn as nn
 import torch
 from torchvision import models
-from utils import save_net,load_net
+# from utils import save_net, load_net
 import torch.nn.functional as F
+
+
 '''model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
@@ -11,11 +13,14 @@ import torch.nn.functional as F
     'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
     'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
 }'''
+
+
 class STE_Relu(torch.autograd.Function):
     def forward(self,x):
         return x*(x>0).float()
     def backward(self,g):
         return g
+
 
 class CSRNet(nn.Module):
     def __init__(self, load_weights=False):

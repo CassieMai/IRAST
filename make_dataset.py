@@ -19,23 +19,25 @@ import cv2
 img_paths = []
 
 with open('./UCF-QNRF_train_with_val.json', 'r') as outfile:
-     img_paths = json.load(outfile)
+    img_paths = json.load(outfile)
 
 
-img_target=[]
-num_label=0
-num_unlabel=0
+img_target = []
+num_label = 0
+num_unlabel = 0
+
 for img_path in img_paths:
-    print img_path
+
+    print(img_path)
     index = img_paths.index(img_path)
-    print index
+    print(index)
     # using this code for parta & partb
     #mat = io.loadmat(img_path.replace('.jpg','.mat').replace('images','ground_truth').replace('IMG_','GT_IMG_')) 
 
     # using this code for ucf-qnrf
     mat = io.loadmat(img_path.replace('.jpg', '_ann.mat').replace('images', 'ground_truth').replace('IMG_', 'GT_IMG_')) 
 
-    img= plt.imread(img_path)
+    img = plt.imread(img_path)
     k = np.zeros((img.shape[0],img.shape[1]))
 
     # using this code for part a & part b
@@ -46,7 +48,7 @@ for img_path in img_paths:
     gt = mat['location_target'] 
 
     gt = gt
-    print gt.shape[0]
+    print(gt.shape[0])
     gt_value = gt.shape[0]
 
     # for validation or testing set in all dataset 
@@ -61,34 +63,31 @@ for img_path in img_paths:
     #for ucf-qnrf training set
     if ((index<255)or(index>=341 and index<506)or(index>=560 and index<664)or(index>=698 and index<743)or(index>=757 and index<811)or(index>=829 and index<857)or(index>=867 and index<901) or(index>=913 and index<938) or (index>=946 and index<953) or (index>=956 and index<960)):
     
-        print 'generate unlabeled image without density map supervision'
+        print('generate unlabeled image without density map supervision')
         num_unlabel = num_unlabel +1
 
         with h5py.File(img_path.replace('.jpg','.h5').replace('images','ground_truth'), 'w') as hf:
              hf['count_value'] = gt_value
-             
 
     else:
         num_label = num_label +1
-        print 'generate with map'
+        print('generate with map')
         for i in range(0, len(gt)):
             if int(gt[i][1]) < img.shape[0] and int(gt[i][0]) < img.shape[1]:
                 k[int(gt[i][1]), int(gt[i][0])] = 1
 
-        d = gaussian_filter(k,3,truncate=4)
+        d = gaussian_filter(k, 3, truncate=4)
 
-        print d.sum()
+        print(d.sum())
 
         with h5py.File(img_path.replace('.jpg', '.h5').replace('images', 'ground_truth'), 'w') as hf:
 
-             hf['density'] = d
+            hf['density'] = d
 
-print img_target
-print len(img_target)
-print 'num_label',num_label
-print 'num_unlabel',num_unlabel
-
-
+print(img_target)
+print(len(img_target))
+print('num_label',num_label)
+print('num_unlabel',num_unlabel)
 
 
 

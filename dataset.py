@@ -7,6 +7,7 @@ from PIL import Image
 from image import *
 import torchvision.transforms.functional as F
 
+
 class listDataset(Dataset):
     def __init__(self,root_unlabel,root_label, shape=None, shuffle=True, transform=None,  train=False, seen=0, batch_size=1, num_workers=4):
         if train==True:
@@ -31,6 +32,7 @@ class listDataset(Dataset):
         
     def __len__(self):
         return self.nSamples
+
     def __getitem__(self,index):
         assert index <= len(self), 'index range error' 
         

@@ -5,8 +5,10 @@ import warnings
 
 from model import CSRNet
 
-from utils import save_checkpoint0,generate_th_for_class,densitymap_to_densitylevel,densitymap_to_densitymask,unlabel_CE_loss4v1,\
-    unlabel_CE_loss3v1,unlabel_CE_loss2v1
+from utils import save_checkpoint0, \
+    densitymap_to_densitylevel, \
+    densitymap_to_densitymask, unlabel_CE_loss4v1, \
+    unlabel_CE_loss3v1, unlabel_CE_loss2v1  # generate_th_for_class
 
 import torch
 import torch.nn as nn
@@ -34,19 +36,15 @@ import matplotlib.pyplot as plt
 
 parser = argparse.ArgumentParser(description='PyTorch CSRNet')
 
-parser.add_argument('train_json', metavar='TRAIN',default='./part_A_train_with_val.json',
+parser.add_argument('train_json', metavar='TRAIN', default='./part_A_train_with_val.json',
                     help='path to train json')
-parser.add_argument('test_json', metavar='TEST',default='./part_A_val.json',
+parser.add_argument('test_json', metavar='TEST', default='./part_A_val.json',
                     help='path to test json')
-
-parser.add_argument('--pre', '-p', metavar='PRETRAINED', default='' ,type=str,
+parser.add_argument('--pre', '-p', metavar='PRETRAINED', default='',type=str,
                     help='path to the pretrained model')
+parser.add_argument('gpu',metavar='GPU', type=str, default='0', help='GPU id to use.')
+parser.add_argument('task',metavar='TASK', type=str, default='0', help='task id to use.')
 
-parser.add_argument('gpu',metavar='GPU', type=str,default='0',
-                    help='GPU id to use.')
-
-parser.add_argument('task',metavar='TASK', type=str,default='0',
-                    help='task id to use.')
 
 def main():
     

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="PublishConfigData" autoUpload="Always" serverName="xiaocmai@hpc.ee.cityu.edu.hk" autoUploadExternalChanges="true">
+    <serverData>
+      <paths name="xiaocmai@hpc.ee.cityu.edu.hk">
+        <serverdata>
+          <mappings>
+            <mapping deploy="/scratch/IRAST" local="$PROJECT_DIR$" web="/" />
+          </mappings>
+        </serverdata>
+      </paths>
+    </serverData>
+    <option name="myAutoUpload" value="ALWAYS" />
+  </component>
+</project>
