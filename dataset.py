@@ -7,16 +7,18 @@ from PIL import Image
 from image import *
 import torchvision.transforms.functional as F
 
+
 class listDataset(Dataset):
-    def __init__(self,root_unlabel,root_label, shape=None, shuffle=True, transform=None,  train=False, seen=0, batch_size=1, num_workers=4):
-        if train==True:
-            root = 1*root_unlabel + 4*root_label
+    def __init__(self, root_unlabel, root_label, shape=None, shuffle=True, transform=None,
+                 train=False, seen=0, batch_size=1, num_workers=4):
+
+        if train:
+            root = 1 * root_unlabel + 4 * root_label
 
         else:
-            root = 1*(1*root_unlabel+1*root_label)
+            root = 1 * (1 * root_unlabel + 1 * root_label)
         random.shuffle(root)
         random.shuffle(root_unlabel)
-
 
         self.nSamples = len(root)
         self.lines = root
@@ -27,19 +29,17 @@ class listDataset(Dataset):
         self.seen = seen
         self.batch_size = batch_size
         self.num_workers = num_workers
-        
-        
+
     def __len__(self):
         return self.nSamples
-    def __getitem__(self,index):
+
+    def __getitem__(self, index):
         assert index <= len(self), 'index range error' 
         
         img_path = self.lines[index]
-
-        img,target,flag = load_data(img_path)
+        img, target, flag = load_data(img_path, self.lines_u)
 
         if self.transform is not None:
             img = self.transform(img)
 
-
-        return img,target,flag
+        return img, target, flag

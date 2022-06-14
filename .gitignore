@@ -1,0 +1,9 @@
+*.tar
+*.zip
+*.png
+*.pth
+*.ckpt
+*.jpg
+*.tiff
+*.out
+*.pyc

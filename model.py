@@ -2,8 +2,10 @@
 import torch.nn as nn
 import torch
 from torchvision import models
-from utils import save_net,load_net
+# from utils import save_net, load_net
 import torch.nn.functional as F
+
+
 '''model_urls = {
     'resnet18': 'https://download.pytorch.org/models/resnet18-5c106cde.pth',
     'resnet34': 'https://download.pytorch.org/models/resnet34-333f7ec4.pth',
@@ -11,11 +13,14 @@ import torch.nn.functional as F
     'resnet101': 'https://download.pytorch.org/models/resnet101-5d3b4d8f.pth',
     'resnet152': 'https://download.pytorch.org/models/resnet152-b121ed2d.pth',
 }'''
+
+
 class STE_Relu(torch.autograd.Function):
     def forward(self,x):
         return x*(x>0).float()
     def backward(self,g):
         return g
+
 
 class CSRNet(nn.Module):
     def __init__(self, load_weights=False):
@@ -50,12 +55,16 @@ class CSRNet(nn.Module):
 
         # init pre-trained model
         if not load_weights:
-            mod = models.vgg16(pretrained = True)
+            # mod = models.vgg16(pretrained = True)
+            mod = models.vgg16(pretrained = False)
+            mod.load_state_dict(torch.load('/home/xiaocmai/scratch/pretrainedmodels/vgg16-397923af.pth'))
             self._initialize_weights()
-            for i in xrange(len(self.frontend.state_dict().items())):
-                self.frontend.state_dict().items()[i][1].data[:] = mod.state_dict().items()[i][1].data[:]
+            # print('mod.state_dict().items()', mod.state_dict().items())
 
-    def forward(self,x):
+            for i in range(len(self.frontend.state_dict().items())):
+                list(self.frontend.state_dict().items())[i][1].data[:] = list(mod.state_dict().items())[i][1].data[:]
+
+    def forward(self, x):
         x = self.frontend(x)
         x = self.backend_0(x)
        
@@ -74,7 +83,7 @@ class CSRNet(nn.Module):
         logits4 = self.output_layer_4(logits4)
        
         #u is the predicted density map,logits is the prediction of surrogate tasks
-        return u,logits2,logits3,logits4 
+        return u, logits2, logits3, logits4
 
     def _initialize_weights(self):
         for m in self.modules():
