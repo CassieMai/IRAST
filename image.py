@@ -11,9 +11,9 @@ import pandas as pd
 def load_data(img_path, unlabel_image_path):
     gt_path = None
     if 'train' in img_path:
-        gt_path = img_path.replace('.jpg', '.csv').replace('train', 'train_den')
+        gt_path = img_path.replace('.png', '.csv').replace('train', 'train_den')
     elif 'test' in img_path:
-        gt_path = img_path.replace('.jpg', '.csv').replace('test', 'test_den')
+        gt_path = img_path.replace('.png', '.csv').replace('test', 'test_den')
     else:
         assert 'train' in img_path or 'test' in img_path
     img = Image.open(img_path).convert('RGB')

@@ -26,8 +26,8 @@ import matplotlib.pyplot as plt
 from torchvision import datasets, transforms
 
 # parameter setting
-dataset_path = '/home/xiaocmai/scratch/datasets/colorization/'
-subset = 'experimentset'
+dataset_path = '/home/xiaocmai/scratch/datasets/Fruit2019/'
+subset = 'None'
 
 transform = transforms.Compose([
            transforms.ToTensor(),
@@ -44,7 +44,9 @@ transform = transforms.Compose([
 #     img_paths = json.load(outfile)
 
 # test images
-dataset_path = os.path.join(dataset_path, subset)
+if not subset == 'None':
+    dataset_path = os.path.join(dataset_path, subset)
+
 test_images = os.listdir(os.path.join(dataset_path, 'test'))
 test_list = []
 for i in test_images:
@@ -79,7 +81,7 @@ for i in range(len(img_paths)):
     # groundtruth_d = cv2.resize(groundtruth_d, (groundtruth_d.shape[1] / 8, groundtruth_d.shape[0] / 8),
     #                            interpolation=cv2.INTER_CUBIC) * 64
 
-    gt_path = img_path.replace('.jpg', '.csv').replace('test', 'test_den')
+    gt_path = img_path.replace('.png', '.csv').replace('test', 'test_den')
     gt_density = pd.read_csv(gt_path, sep=',', header=None).values
     gt_density = np.asarray(gt_density)
     h, w = gt_density.shape[0], gt_density.shape[1]

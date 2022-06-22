@@ -33,7 +33,7 @@ for img_path in img_paths:
     #mat = io.loadmat(img_path.replace('.jpg','.mat').replace('images','ground_truth').replace('IMG_','GT_IMG_')) 
 
     # using this code for ucf-qnrf
-    mat = io.loadmat(img_path.replace('.jpg', '_ann.mat').replace('images', 'ground_truth').replace('IMG_', 'GT_IMG_')) 
+    mat = io.loadmat(img_path.replace('.png', '_ann.mat').replace('images', 'ground_truth').replace('IMG_', 'GT_IMG_')) 
 
     img= plt.imread(img_path)
     k = np.zeros((img.shape[0],img.shape[1]))
@@ -64,7 +64,7 @@ for img_path in img_paths:
         print 'generate unlabeled image without density map supervision'
         num_unlabel = num_unlabel +1
 
-        with h5py.File(img_path.replace('.jpg','.h5').replace('images','ground_truth'), 'w') as hf:
+        with h5py.File(img_path.replace('.png','.h5').replace('images','ground_truth'), 'w') as hf:
              hf['count_value'] = gt_value
              
 

@@ -44,8 +44,8 @@ parser.add_argument('--pre', '-p', metavar='PRETRAINED', default='', type=str,
 parser.add_argument('--gpu', metavar='GPU', type=str, default='0', help='GPU id to use.')
 parser.add_argument('--task', metavar='TASK', type=str, default='0', help='task id to use.')
 
-parser.add_argument('--dataset_path', type=str, default='/home/xiaocmai/scratch/datasets/colorization/')
-parser.add_argument('--subset', type=str, default='debugset', choices=['debugset', 'experimentset'])
+parser.add_argument('--dataset_path', type=str, default='/home/xiaocmai/scratch/datasets/Fruit2019/')
+parser.add_argument('--subset', type=str, default='debugset', choices=['debugset', 'experimentset', 'None'])
 
 
 def main():
@@ -99,7 +99,10 @@ def main():
     #     val_list_label = val_list
 
     # # Orange dataset
-    dataset_path = os.path.join(args.dataset_path, args.subset)
+    if not args.subset == 'None':
+        dataset_path = os.path.join(args.dataset_path, args.subset)
+    else:
+        dataset_path = args.dataset_path
     train_images = os.listdir(os.path.join(dataset_path, 'train'))
     val_images = os.listdir(os.path.join(dataset_path, 'test'))
     train_list = []
