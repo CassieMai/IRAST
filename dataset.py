@@ -6,6 +6,8 @@ from torch.utils.data import Dataset
 from PIL import Image
 from image import *
 import torchvision.transforms.functional as F
+import matplotlib.pyplot as plt
+import cv2
 
 
 class listDataset(Dataset):
@@ -38,8 +40,14 @@ class listDataset(Dataset):
         
         img_path = self.lines[index]
         img, target, flag = load_data(img_path, self.lines_u)
+        # img = np.array(img)
+        # img = torch.tensor(img).permute(2, 0, 1)
 
         if self.transform is not None:
             img = self.transform(img)
 
+        # print('img shape', img.shape)
+        # plt.imsave('img.png', img.numpy().transpose(1,2,0)) # 
+        # plt.close()
+        # assert 1 > 2
         return img, target, flag

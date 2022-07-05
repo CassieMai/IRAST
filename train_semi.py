@@ -42,7 +42,7 @@ parser.add_argument('test_json', metavar='TEST', default='./part_A_val.json',
 parser.add_argument('--pre', '-p', metavar='PRETRAINED', default='', type=str,
                     help='path to the pretrained model')
 parser.add_argument('--gpu', metavar='GPU', type=str, default='0', help='GPU id to use.')
-parser.add_argument('--task', metavar='TASK', type=str, default='0', help='task id to use.')
+parser.add_argument('--task', metavar='TASK', type=str, default='debug', help='task id to use.') # ======
 
 parser.add_argument('--dataset_path', type=str, default='/home/xiaocmai/scratch/datasets/colorization/')
 parser.add_argument('--subset', type=str, default='debugset', choices=['debugset', 'experimentset'])
@@ -62,7 +62,7 @@ def main():
     args.momentum = 0.9
     args.decay = 5*1e-4
     args.start_epoch = 0
-    args.epochs = 200   # ========
+    args.epochs = 100   # ========
     args.steps = [-1, 1, 100, 150]
     args.scales = [1, 1, 1, 1]
     args.workers = 4
@@ -184,8 +184,8 @@ def train(train_list_unlabel, train_list_label, model, criterion_mse, criterion_
                             shuffle = True,
                             transform = transforms.Compose([
                                 transforms.ToTensor(),
-                                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                     std=[0.229, 0.224, 0.225]),  # ==== TODO: revise
+                                # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                                    #  std=[0.229, 0.224, 0.225]),  # ==== TODO: revise
                             ]),
                             train = True,
                             seen = model.seen,
@@ -201,7 +201,7 @@ def train(train_list_unlabel, train_list_label, model, criterion_mse, criterion_
     for i, (img, target, flag) in enumerate(train_loader):
         data_time.update(time.time() - end)
 
-        img = Variable(img.cuda())
+        img = Variable(img.float().cuda())
 
         target = target.type(torch.FloatTensor).unsqueeze(1).cuda()
         target = Variable(target)
@@ -261,8 +261,8 @@ def validate(val_list_unlabel, val_list_label, model):
                             shuffle=False,
                             transform=transforms.Compose([
                                 transforms.ToTensor(),
-                                transforms.Normalize(mean=[0.485, 0.456, 0.406],
-                                                     std=[0.229, 0.224, 0.225]),
+                                # transforms.Normalize(mean=[0.485, 0.456, 0.406],
+                                #                      std=[0.229, 0.224, 0.225]),
                             ]), train=False
                             ),
         batch_size=args.batch_size)
@@ -274,7 +274,7 @@ def validate(val_list_unlabel, val_list_label, model):
     for i, (img, target, flag) in enumerate(test_loader):
         img = img.cuda()
 
-        img = Variable(img)
+        img = Variable(img.float())
         target = target.type(torch.FloatTensor).unsqueeze(0)
         target = target.cuda()
         target = Variable(target)  # *mask_roi_v sharp
